@@ -1,0 +1,35 @@
+.logPanel {
+	-moz-box-shadow:    1px 1px 2px 3px #777;
+	-webkit-box-shadow: 1px 1px 2px 3px #777;
+	box-shadow: 1px 1px 2px 3px #777;
+	list-style: none;
+	background-color: white;
+	opacity: 0.95;
+	margin: 0;
+	padding: 0.25em;
+	border-width: 1px;
+	border-color: #777;
+	border-style: solid;
+	position: fixed;
+	top: 20px;
+	left: 20px;
+	width: 400px;
+	max-width: 50%;
+	height: 400px;
+	max-height: 50%;
+	font-size: small;
+	font-family: monospace;
+	overflow: scroll;
+}
+
+.logPanel .debug {
+	color: blue;
+}
+
+.logPanel .warn {
+	color: orange;
+}
+
+.logPanel .error {
+	color: red;
+}

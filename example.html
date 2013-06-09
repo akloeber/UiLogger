@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" type="text/css" href="css/UiLogger.css">
+</head>
+<body>
+	<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos, laudantium, totam placeat facere quos molestiae dolore repellendus quidem perferendis consequatur animi quis tenetur voluptatibus nesciunt soluta mollitia eaque non quibusdam!</div>
+</body>
+
+<script type="text/javascript" src="js/UiLogger.js"></script>
+<script type="text/javascript">
+	console.log('log message');
+	console.debug('debug message');
+	console.info('info message');
+	console.warn('warning');
+	console.error('error');
+	console.log({
+		some: 'object'
+	});
+
+	UiLogger.showLogPanel();
+</script>
+
+</html>
