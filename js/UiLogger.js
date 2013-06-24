@@ -1,6 +1,34 @@
 var UiLogger = (function() {
-  // store reference to native logger
-	var nativeConsole = console;
+	(function () {
+		// intercept console logs, thanks to Toby Ho (see http://tobyho.com/2012/07/27/taking-over-console-log/)
+		var console = window.console;
+		if (!console) {
+			return;
+		}
+
+		function intercept(method){
+			var original = console[method];
+
+			console[method] = function() {
+				// Dispatch to UiLogger
+				UiLogger[method].apply(UiLogger, arguments);
+
+				if (original.apply){
+					// Do this for normal browsers
+					original.apply(console, arguments);
+				} else {
+					// Do this for IE
+					var message = Array.prototype.slice.apply(arguments).join(' ');
+					original(message);
+				}
+			};
+		}
+
+		var methods = ['log', 'debug', 'info', 'warn', 'error'];
+		for (var i = 0; i < methods.length; i++) {
+			intercept(methods[i]);
+		}
+	})();
 
 	var LogLevel = {
 		DEFAULT : 0,
@@ -13,32 +41,6 @@ var UiLogger = (function() {
 	var logger = {
 		// disabled by default
 		messages : []
-	};
-
-	// swap console implemenation
-	console = logger;
-
-	var logNative = function(logEntry) {
-		var message = logger.messageDecorator(logEntry);
-
-		// do native logging
-		switch(logEntry.level) {
-			case LogLevel.DEBUG:
-				nativeConsole.debug(message);
-				break;
-			case LogLevel.INFO:
-				nativeConsole.info(message);
-				break;
-			case LogLevel.WARN:
-				nativeConsole.warn(message);
-				break;
-			case LogLevel.ERROR:
-				nativeConsole.error(message);
-				break;
-			default:
-				nativeConsole.log(message);
-				break;
-		}
 	};
 
 	var logToUi = function(logEntry) {
@@ -85,9 +87,6 @@ var UiLogger = (function() {
 
 		// collect messages to access them later
 		logger.messages.push(logEntry);
-
-		// log natively
-		logNative(logEntry);
 
 		if(logger.isShowingLogPanel()) {
 			logToUi(logEntry);
@@ -223,6 +222,7 @@ var UiLogger = (function() {
 		getMessageDecorator : logger.getMessageDecorator,
 		setMessageDecorator : logger.setMessageDecorator
 	};
+	//for (var attrname in nativeConsole) { UiLoggerApi[attrname] = nativeConsole[attrname]; }
 
 	return UiLoggerApi;
 })();
